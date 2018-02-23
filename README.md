@@ -56,11 +56,12 @@ Battleship.players[playerid].placeShipsFromMatrix(grid)
 ```
 
 ## Classes
+- Battleship
 - Player
 - PlayerInfo
-- BaseShip
-- Battleship (inherits BaseShip)
-- Cruiser (inherits BaseShip)
-- Carier (inherits BaseShip)
-- Submarine (inherits BaseShip)
-- Destroyer (inherits BaseShip)
+- Ships.BaseShip
+- Ships.Battleship (inherits BaseShip)
+- Ships.Cruiser (inherits BaseShip)
+- Ships.Carier (inherits BaseShip)
+- Ships.Submarine (inherits BaseShip)
+- Ships.Destroyer (inherits BaseShip)

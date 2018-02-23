@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 from __future__ import print_function
 import random
-from ships import *
+import ships
 import re
 
 ## PlayerInfo class
@@ -30,7 +30,7 @@ class Player:
         self.ShipGrid = self.initializeGrid(self.parent.gridsize)
         self.ShotGrid = self.initializeGrid(self.parent.gridsize)
         
-        self.ships = {1: Battleship(self), 2: Cruiser(self), 3: Carrier(self), 4: Submarine(self), 5: Destroyer(self)}
+        self.ships = {1: ships.Battleship(self), 2: ships.Cruiser(self), 3: ships.Carrier(self), 4: ships.Submarine(self), 5: ships.Destroyer(self)}
         self.shipsAlive = len(self.ships)
     
     ## Initalize grid
@@ -43,22 +43,42 @@ class Player:
         return grid
         
     ## Check which ships are still alive
+    #
+    #
     def getAliveShipCount(self):
-        aliveshipscount = 0
+        aliveshipcount = 0
         for shipid in self.ships:
-            aliveshipcount += self.ship[shipid].getShipState
+            aliveshipcount += self.ships[shipid].getShipState()
             
         return aliveshipcount
+        
+    ## Returns the number of shots
+    #
+    # The shotgrid contains 1 for a hit and -1 for a missed shot. The number of shots is therefore equal
+    # to the sum of the absolute values in the shotgrid 
+    def getShotCount(self):
+        shotcount = 0
+        for row in self.ShotGrid:
+            shotcount += sum(map(abs,row))
+            
+        return shotcount
+        
             
     ## Prints the shot grid
+    #
+    #
     def printShotGrid(self):
         self.printGrid(self.ShotGrid)
       
     ## Print the ship grid
+    #
+    #
     def printShipGrid(self):
         self.printGrid(self.ShipGrid)
         
     ## Print a grid
+    #
+    #
     def printGrid(self, grid):
         # Print column numbers
         column_head =  " ".join(["{: d}".format(x) for x in range(10)])
@@ -73,6 +93,8 @@ class Player:
         print("")
             
     ## Place a shot
+    #
+    #
     def placeShot(self, r, c):
         if r > self.parent.gridsize-1 or c > self.parent.gridsize -1 or r < 0 or c < 0:
             # Invalid shot
@@ -97,10 +119,18 @@ class Player:
             return -1
             
             
-    # Place ship with (external) matrix
+    ## Place ship with (external) matrix
+    #
+    #
     def placeShipsFromMatrix(self, matrix):
         self.ShipGrid = matrix
             
+    ## Place ships random
+    #
+    # The random position is determined in two steps. First a random orientation (horizontal of vertial) is
+    # determined. The next step is to combine the orientation with the length of the ship to determine the 
+    # position in such a way that the ships stay within the boundaries of the grid. Ships are not allowed 
+    # to overlap. Therefore, a position is searched for until there is no overlap with another ship.
     def placeShipsRandom(self):
         for shipid in self.ships:
             if(random.randint(0,1)):
@@ -118,7 +148,10 @@ class Player:
                     random_r = random.randint(0,self.parent.gridsize-1-self.ships[shipid].getShipLength())
                     random_c = random.randint(0,self.parent.gridsize-1)
                     self.ships[shipid].placeShip(shipid, random_r, random_c, orientation)
-                
+    
+    ##
+    #
+    #
     def checkShot(self, r, c):
         shipid = self.ShipGrid[r][c]
         if shipid > 0:

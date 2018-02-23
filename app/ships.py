@@ -1,4 +1,5 @@
 #!/usr/bin/python -tt
+from __future__ import print_function
 
 ## Baseclass for Ship
 #
@@ -31,7 +32,7 @@ class BaseShip:
     #
     # Return True if the ship is alive and False if the has has sunk
     def getShipState(self):
-        return shiplength > HitCounter
+        return self.shiplength > self.hitcounter
         
     ## Get the ship length
     #

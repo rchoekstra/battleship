@@ -34,7 +34,7 @@ while(game.running):
         print("Ships")
         game.players[game.turn].printShipGrid()
         
-        print("Shots")
+        print("Shots (n="+str(game.players[game.turn].getShotCount())+")")
         game.players[game.turn].printShotGrid()
         
         rc = input("Row, col: ")
@@ -44,5 +44,11 @@ while(game.running):
         print("Return value:", validshot)
         _dummy_ = raw_input("Press ENTER to proceed")
 
-
-
+print("Game finished")
+print("")
+for playerid in game.players:
+    print("Game statistics for", game.players[playerid].info.name)
+    print("Number of shots:", game.players[playerid].getShotCount())
+    print("Hits:           ", "?")
+    print("Missed:         ", "?")
+    print("Ships alive:    ", game.players[playerid].getAliveShipCount())
