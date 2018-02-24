@@ -3,6 +3,7 @@ from __future__ import print_function
 import random
 import ships
 import re
+from collections import Counter
 
 ## PlayerInfo class
 #
@@ -63,7 +64,17 @@ class Player:
             
         return shotcount
         
-            
+    ## Get the number of hits
+    #
+    # Counts how many times the umber 1 occurs in the shotgrid
+    def getHitCount(self):
+        hitcounter = 0
+        for row in self.ShotGrid:
+            print(row.count(1))
+            hitcounter += row.count(1)
+        
+        return hitcounter
+   
     ## Prints the shot grid
     #
     #
