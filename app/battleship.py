@@ -34,6 +34,13 @@ class Player:
         self.ships = {1: ships.Battleship(self), 2: ships.Cruiser(self), 3: ships.Carrier(self), 4: ships.Submarine(self), 5: ships.Destroyer(self)}
         self.shipsAlive = len(self.ships)
     
+    ## Placeholder
+    #
+    #
+    def getShotLocation(self, shotgrid, shipstates):
+        pass
+    
+    
     ## Initalize grid
     #
     # This function returns a square array (default size 10x10) filled with zeros
