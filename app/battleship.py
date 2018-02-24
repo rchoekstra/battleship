@@ -52,7 +52,20 @@ class Player:
             aliveshipcount += self.ships[shipid].getShipState()
             
         return aliveshipcount
-        
+    
+    ## Get the state of all the ships
+    #
+    # Returns a dict. The name of shiptype is the key, the value is True for a ships that is still alive
+    # and False for a ship that has been sunk.
+    def getAllShipStates(self):
+        shipstates = dict()
+        for shipid in self.ships:
+            key = self.ships[shipid].type
+            val = self.ships[shipid].getShipState()
+            shipstates[key] = val
+            
+        return shipstates
+    
     ## Returns the number of shots
     #
     # The shotgrid contains 1 for a hit and -1 for a missed shot. The number of shots is therefore equal
@@ -70,12 +83,11 @@ class Player:
     def getHitCount(self):
         hitcounter = 0
         for row in self.ShotGrid:
-            print(row.count(1))
             hitcounter += row.count(1)
         
         return hitcounter
    
-    ## Prints the shot grid
+    ## Print the shot grid
     #
     #
     def printShotGrid(self):
