@@ -121,6 +121,12 @@ class Player:
             print(rownum, "|",  " ".join(["{: d}".format(x) for x in r]))
             rownum += 1
         print("")
+        
+    ## Get shot grid
+    #
+    #
+    def getShotgrid(self):
+        return self.ShotGrid
             
     ## Place a shot
     #
@@ -187,7 +193,7 @@ class Player:
         if shipid > 0:
             self.ShipGrid[r][c] = -self.ShipGrid[r][c]
             if self.ships[shipid].incrementHitCounter():
-                print(self.ships[shipid].type , "sunk")
+                #print(self.ships[shipid].type , "sunk")
                 self.shipsAlive -= 1
                 if self.shipsAlive == 0:
                     self.parent.running = False
@@ -208,6 +214,7 @@ class Battleship:
     # 0: Training
     # 1: Single player
     # 2: Multiplayer
+    # 3: Competing agents (multiplayer)
     gamemode = 0
 
     # Initialize players
