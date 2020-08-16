@@ -1,6 +1,3 @@
-#!/usr/bin/python -tt
-from __future__ import print_function
-
 ## Baseclass for Ship
 #
 # This class is only used indirectly. It is inherited by the Battleship, Cruiser, Carrier, Submartine and Destroyer classes.

@@ -1,5 +1,4 @@
-#!/usr/bin/python -tt
-from __future__ import print_function
+import numpy as np
 import random
 import ships
 import re
@@ -44,11 +43,8 @@ class Player:
     ## Initalize grid
     #
     # This function returns a square array (default size 10x10) filled with zeros
-    def initializeGrid(self, size=10):
-        grid = []
-        for i in range(size):
-            grid.append([0]*size)
-        return grid
+    def initializeGrid(self, gridsize):
+        return np.full((gridsize,gridsize),0,dtype='int32')
         
     ## Check which ships are still alive
     #
@@ -78,21 +74,15 @@ class Player:
     # The shotgrid contains 1 for a hit and -1 for a missed shot. The number of shots is therefore equal
     # to the sum of the absolute values in the shotgrid 
     def getShotCount(self):
-        shotcount = 0
-        for row in self.ShotGrid:
-            shotcount += sum(map(abs,row))
-            
-        return shotcount
+        return np.sum(self.ShotGrid!=0)
+
         
     ## Get the number of hits
     #
     # Counts how many times the umber 1 occurs in the shotgrid
     def getHitCount(self):
-        hitcounter = 0
-        for row in self.ShotGrid:
-            hitcounter += row.count(1)
-        
-        return hitcounter
+        return np.sum(self.ShotGrid==1)
+
    
     ## Print the shot grid
     #
@@ -111,9 +101,9 @@ class Player:
     #
     def printGrid(self, grid):
         # Print column numbers
-        column_head =  " ".join(["{: d}".format(x) for x in range(10)])
+        column_head =  " ".join(["{: d}".format(x) for x in range(self.parent.gridsize)]) # self.ShipGrid.shape[0]
         print("  |", column_head)
-        print("-"*33)
+        print("-"*(3*self.parent.gridsize+3))
         
         rownum = 0
         for r in grid:
@@ -169,13 +159,13 @@ class Player:
     # to overlap. Therefore, a position is searched for until there is no overlap with another ship.
     def placeShipsRandom(self):
         for shipid in self.ships:
-            if(random.randint(0,1)):
-                orientation = 'H'
-            else:
-                orientation = 'V'
-                
             # Try to place the ship until a valid place is found
             while(self.ships[shipid].placed == False):
+                if(random.randint(0, 1)):
+                    orientation = 'H'
+                else:
+                    orientation = 'V'
+
                 if(orientation=='H'):
                     random_r = random.randint(0,self.parent.gridsize-1)
                     random_c = random.randint(0,self.parent.gridsize-1-self.ships[shipid].getShipLength())
@@ -184,6 +174,9 @@ class Player:
                     random_r = random.randint(0,self.parent.gridsize-1-self.ships[shipid].getShipLength())
                     random_c = random.randint(0,self.parent.gridsize-1)
                     self.ships[shipid].placeShip(shipid, random_r, random_c, orientation)
+
+    def getValidShots(self):
+        return self.ShotGrid==0
     
     ##
     #
@@ -218,11 +211,13 @@ class Battleship:
     gamemode = 0
 
     # Initialize players
-    def __init__(self, gamemode=2):
+    def __init__(self, gamemode=2, gridsize=10):
         self.gamemode = gamemode
+        self.gridsize = gridsize
         self.players = {0: Player(0,self), 1: Player(1,self)}
         self.players[0].info.setName("Player 1")
         self.players[1].info.setName("Player 2")
+        
         
         # Which player has the first turn
         if(self.gamemode == 0):
@@ -239,14 +234,8 @@ class Battleship:
     #
     #
     def loadShipMatrixFromFile(self,f):
-        grid = []
-        with open(f) as file:
-            for line in file:
-                # strip double spaces
-                line = re.sub(' +',' ', line.strip())
-                grid_row = [int(x) for x in line.split(' ')]
-                grid.append(grid_row)
-        return grid
-    
+        return np.loadtxt(f,dtype='int32')
+
+
 if __name__=='__main__':
     pass

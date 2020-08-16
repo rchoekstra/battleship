@@ -1,5 +1,4 @@
 #!/usr/bin/python -tt
-from __future__ import print_function
 import random
 import os
 
@@ -23,7 +22,15 @@ class AgentReal(Agent):
     #
     #
     def getShotLocation(self, shotgrid, shipstates):
-        return input("Row, col: ")
+        valid_input = False
+        while  not valid_input:
+            raw_input = input("Row, col: ")
+            processed_input = [ int(x) for x in raw_input.split(',') if x.isdigit()]
+            if len(processed_input)==2:
+                valid_input = True
+                return processed_input
+            else:
+                print("Invalid input")
         
 ## Random agents
 #
