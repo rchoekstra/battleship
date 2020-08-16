@@ -107,6 +107,9 @@ for episode in range(NUM_EPISODES):
     durations.append(duration)
 
 
+df = pd.DataFrame(list(zip(shotcounts, durations)),
+                columns=['shotcount', 'duration'])
+
 plt.scatter(df.shotcount, df.duration, s=1)
 plt.ylim(0, 2)
 plt.show()
